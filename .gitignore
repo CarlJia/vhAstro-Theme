@@ -26,3 +26,6 @@ test/
 /public/hanplayer
 /public/MineWeb
 /public/other
+
+# sftp
+sftp-config.js

@@ -9,7 +9,10 @@
     "astro": "astro",
     "newpost": "node ./script/newpost.js",
     "offdev": "astro preferences disable devToolbar",
-    "ondev": "astro preferences enable devToolbar"
+    "ondev": "astro preferences enable devToolbar",
+    "deploy:sftp": "astro build && node ./script/deploy-sftp.js",
+    "deploy:upload": "node ./script/deploy-sftp.js",
+    "diagnose:sftp": "node ./script/diagnose-sftp.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.6",
@@ -27,16 +30,19 @@
     "@types/dplayer": "^1.25.5",
     "@types/nprogress": "^0.2.3",
     "@waline/client": "^3.5.7",
+    "archiver": "^7.0.1",
     "cheerio": "^1.0.0",
     "dayjs": "^1.11.13",
     "less": "^4.3.0",
     "mdast-util-to-string": "^4.0.0",
+    "p-limit": "^6.2.0",
     "reading-time": "^1.5.0",
     "rehype-katex": "^7.0.1",
     "rehype-slug": "^6.0.0",
     "remark-directive": "^4.0.0",
     "remark-math": "^6.0.0",
     "remark-sectionize": "^2.1.0",
+    "ssh2-sftp-client": "^12.0.0",
     "typescript": "^5.8.3",
     "unist-util-visit": "^5.0.0"
   },
