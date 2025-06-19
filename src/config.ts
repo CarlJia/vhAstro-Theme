@@ -19,7 +19,7 @@ export default {
   Tips: '<p>欢迎光临我的博客 🎉</p><p>这里会分享我的日常和学习中的收集、整理及总结，希望能对你有所帮助:) 💖</p>',
   // 首页打字机文案列表
   TypeWriteList: [
-    '时光荏苒，总要留下点什么.',
+    '时光荏苒，总要留下点什么。',
     "Time flies, there must always be something left behind.",
   ],
   // 网站创建时间
