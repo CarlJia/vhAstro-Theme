@@ -1,12 +1,12 @@
 export default {
   // 网站标题
-  Title: 'CarlJia博客',
+  Title: 'CarlJia的博客',
   // 网站地址
-  Site: 'http://1234.sylu.cc',
+  Site: 'https://blog.i-nas.site',
   // 网站副标题
   Subtitle: '时光荏苒，总要留下点什么.',
   // 网站描述
-  Description: 'CarlJia博客',
+  Description: 'CarlJia的博客',
   // 网站作者
   Author: 'CarlJia',
   // 作者头像

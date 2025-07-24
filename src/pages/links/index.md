@@ -14,7 +14,7 @@ type: "links"
 
 ```yaml
 name: CarlJia博客
-link: https://1234.sylu.cc
+link: https://blog.i-nas.site
 avatar: https://img.jialei.fun/v2/b2lmmUK.jpeg
 desc: 时光荏苒，总要留下点什么。
 ```
