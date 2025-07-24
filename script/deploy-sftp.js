@@ -1,8 +1,8 @@
 /*
- * @Author: Han
- * @Date: 2025-01-27 10:00:00
- * @LastEditors: Han
- * @LastEditTime: 2025-01-27 10:00:00
+ * @Author: CarlJia
+ * @Date: 2025-05-25 10:00:00
+ * @LastEditors: CarlJia
+ * @LastEditTime: 2025-05-25 10:00:00
  * @Description: SFTP部署脚本
  */
 import SftpClient from 'ssh2-sftp-client';

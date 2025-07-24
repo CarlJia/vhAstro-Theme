@@ -3,13 +3,14 @@
  * @Date: 2025-06-19
  * @LastEditors: CarlJia
  * @LastEditTime: 2025-06-19
- * @Description: SFTP配置文件示例
- * 
+ * @Description: SFTP/FTP配置文件示例
+ *
  * 使用方法：
  * 1. 复制此文件为 sftp-config.js
- * 2. 填入您的实际SFTP连接信息
- * 3. 运行 npm run deploy:sftp 进行部署
- * 
+ * 2. 填入您的实际SFTP/FTP连接信息
+ * 3. 运行 npm run deploy:sftp 进行SFTP部署
+ * 4. 运行 npm run deploy:ftp 进行FTP部署
+ *
  * 私钥格式说明：
  * - 支持OpenSSH PEM格式和PuTTY PPK格式
  * - OpenSSH格式：文件内容包含 "-----BEGIN" 和 "-----END" 标记
@@ -37,13 +38,13 @@
 export default {
   // 服务器配置
   host: 'your-server.com',           // 服务器地址
-  port: 22,                          // SSH端口
+  port: 22,                          // SSH端口（SFTP）或 FTP 端口
   username: 'your-username',         // 用户名
   
   // 认证方式 (二选一)
   password: 'your-password',         // 密码认证
-  // privateKey: '/path/to/private/key', // 私钥认证 (推荐)
-  
+  // privateKey: '/path/to/private/key', // 私钥认证 (SFTP 推荐)
+
   // 路径配置
   localPath: './dist',               // 本地构建目录
   remotePath: '/var/www/html',       // 远程部署目录
@@ -68,5 +69,9 @@ export default {
     '.vscode/**',
     '*.tmp',
     '*.temp'
+  ],
+  // FTP 专用配置
+  useFTP: false,                     // 是否使用 FTP 模式
+  secure: false                      // 是否使用 FTPS (SSL/TLS)
   ]
 }; 

@@ -12,7 +12,8 @@
     "ondev": "astro preferences enable devToolbar",
     "deploy:sftp": "astro build && node ./script/deploy-sftp.js",
     "deploy:upload": "node ./script/deploy-sftp.js",
-    "diagnose:sftp": "node ./script/diagnose-sftp.js"
+    "diagnose:sftp": "node ./script/diagnose-sftp.js",
+    "deploy:ftp": "astro build && node ./script/deploy-ftp.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.6",
@@ -31,6 +32,7 @@
     "@types/nprogress": "^0.2.3",
     "@waline/client": "^3.5.7",
     "archiver": "^7.0.1",
+    "basic-ftp": "^5.0.5",
     "cheerio": "^1.0.0",
     "dayjs": "^1.11.13",
     "less": "^4.3.0",
