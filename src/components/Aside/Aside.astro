@@ -13,7 +13,7 @@ import { getCategories, getTags, getRecommendArticles, getCountInfo } from "@/ut
 // 分类列表
 const categories = getCategories();
 // 热门标签
-const tags = getTags();
+const tags = getTags().slice(0, 16);
 // 获取网站统计数据
 const CountInfo = getCountInfo();
 // 最新文章
@@ -108,6 +108,18 @@ import "./Aside.less";
 						</a>
 					))}
 				</div>
+			</section>
+		)
+	}
+
+	<!-- 流量卡 -->
+	{
+		(
+			<section class="vh-aside-item adcard">
+				<h3>精品流量卡</h3>
+				<a class="vh-aside-adcard" href="https://h5.lot-ml.com/ProductEn/Index/548465d7349b6599" target="_blank" rel="noopener noreferrer">
+					<img src="/assets/images/phone-card.webp" alt="精品大流量卡" />
+				</a>
 			</section>
 		)
 	}

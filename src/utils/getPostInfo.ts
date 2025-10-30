@@ -31,4 +31,13 @@ const getRecommendArticles = () => {
   return (recommendList.length ? recommendList : posts.slice(0, 6)).map(i => ({ title: i.data.title, date: i.data.date, id: i.data.id }))
 };
 
-export { getCategories, getTags, getRecommendArticles, getCountInfo };
+// 获取上一篇下一篇文章
+const getPrevNextPosts = (id: string) => {
+  const noHidePosts = posts.filter(i => !i.data.hide);
+  const index = noHidePosts.findIndex(i => i.data.id === id);
+  const none = { title: '没有啦~', id: '#' };
+  return { prev: noHidePosts[index - 1] ? noHidePosts[index - 1].data : none, next: noHidePosts[index + 1] ? noHidePosts[index + 1].data : none }
+}
+
+
+export { getCategories, getTags, getRecommendArticles, getCountInfo, getPrevNextPosts };

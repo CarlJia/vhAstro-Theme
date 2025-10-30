@@ -2,6 +2,7 @@ import path from "path";
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import Compress from "@playform/compress";
+import Compressor from "astro-compressor";
 import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -21,7 +22,7 @@ export default defineConfig({
 	integrations: [swup({
 		theme: false,
 		animationClass: "vh-animation-",
-		containers: [".main-inner>.main-inner-content",'.vh-header>.main'],
+		containers: [".main-inner>.main-inner-content", '.vh-header>.main'],
 		smoothScrolling: true,
 		progress: true,
 		cache: true,
@@ -31,15 +32,23 @@ export default defineConfig({
 		updateBodyClass: false,
 		globalInstance: true
 	}),
-	Compress({ CSS: false, Image: false, Action: { Passed: async () => true } }),
+	Compress({ Image: false, Action: { Passed: async () => true } }),
 	sitemap({
-		changefreq: 'weekly', priority: 0.7, lastmod: new Date(),
 		// 处理末尾带 / 的 url
 		serialize: (item) => ({ ...item, url: item.url.endsWith('/') ? item.url.slice(0, -1) : item.url })
-	}), mdx({ extendMarkdownConfig: false })],
+	}),
+	mdx({ extendMarkdownConfig: false }),
+	Compressor({ gzip: false, brotli: true, fileExtensions: [".html", ".css", ".js"] })
+	],
 	markdown: {
 		remarkPlugins: [remarkMath, remarkDirective, remarkNote,],
-		rehypePlugins: [rehypeKatex, rehypeSlug, addClassNames],
+		rehypePlugins: [[
+			rehypeKatex, {
+				output: 'mathml',
+				trust: true,
+				strict: false
+			}
+		], rehypeSlug, addClassNames],
 		syntaxHighlight: 'shiki',
 		shikiConfig: { theme: 'github-light' },
 	},

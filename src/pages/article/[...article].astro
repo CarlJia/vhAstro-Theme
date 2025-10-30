@@ -1,17 +1,19 @@
 ---
 import { getDescription, fmtTime } from "@/utils/index";
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import { render } from "astro:content";
 export async function getStaticPaths() {
 	const posts = await getCollection("blog");
 	return posts.map((post: any) => ({ params: { article: post.data.id }, props: post }));
 }
 // 处理文章内容
-type Props = CollectionEntry<"blog">;
 const post: any = Astro.props;
 // 获取封面图
 import getCover from "@/utils/getCover";
 const ARTICLE_COVER: string = await getCover(post.data.cover);
+// 获取文章数据
+import { getPrevNextPosts } from "@/utils/getPostInfo";
+const { prev, next } = getPrevNextPosts(post.data.id);
 // 页面 Info
 import SITE_CONFIG from "@/config";
 const { Site, Title, Author, GoogleAds } = SITE_CONFIG;
@@ -24,6 +26,8 @@ const { reading_time, article_word_count } = remarkPluginFrontmatter;
 import Layout from "@/layouts/Layout/Layout.astro";
 // Copyright 组件
 import Copyright from "@/components/Copyright/Copyright.astro";
+// OTArticle 组件
+import PrevNextArticle from "@/components/PrevNextArticle/PrevNextArticle.astro";
 // Reward 组件
 import Reward from "@/components/Reward/Reward.astro";
 // 评论组件
@@ -72,8 +76,10 @@ import "@/styles/ArticleBase.less";
 			</section>
 		</main>
 		<footer>
+			<!-- 上一篇下一批 -->
+			<PrevNextArticle prev={prev} next={next} />
 			<!-- 打赏组件 -->
-			{SITE_CONFIG.Reward && (SITE_CONFIG.Reward.AliPay || SITE_CONFIG.Reward.WeChat) && <Reward />}
+			<Reward />
 			<!-- 版权©️信息 -->
 			<Copyright site={Site} id={post.data.id} title={post.data.title} sitename={Title} time={fmtTime(post.data.date, "YYYY-MM-DD A")} auther={Author} />
 			<!-- 底部谷歌广告 -->
