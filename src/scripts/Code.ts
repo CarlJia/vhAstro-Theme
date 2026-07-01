@@ -1,11 +1,13 @@
 // Pre Code 代码复制功能======
 let copyText = null;
-// Pre 滚动条======
-import "overlayscrollbars/overlayscrollbars.css";
-import { OverlayScrollbars } from "overlayscrollbars";
-export default () => {
+export default async () => {
+  const preList = document.querySelectorAll("section.vh-code-box>pre.astro-code");
+  if (!preList.length) return;
   // Pre 滚动条======
-  document.querySelectorAll("section.vh-code-box>pre.astro-code").forEach((i: any) => {
+  await import("overlayscrollbars/overlayscrollbars.css");
+  const { OverlayScrollbars } = await import("overlayscrollbars");
+  // Pre 滚动条======
+  preList.forEach((i: any) => {
     OverlayScrollbars(i, { scrollbars: { autoHide: "leave", autoHideDelay: 500, autoHideSuspend: false } });
   });
   // Pre Code 代码复制功能======

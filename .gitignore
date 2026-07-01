@@ -29,3 +29,5 @@ test/
 
 # sftp
 sftp-config.js
+/.pnpm-store/
+/.idea/

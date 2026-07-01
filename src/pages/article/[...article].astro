@@ -37,7 +37,7 @@ import "@/styles/Article.less";
 import "@/styles/ArticleBase.less";
 ---
 
-<Layout title={post.data.title} keywords={post.data.tags} description={description} pagecover={ARTICLE_COVER}>
+<Layout title={post.data.title} keywords={post.data.tags} description={description} pagecover={ARTICLE_COVER} datePublished={post.data.date} dateModified={post.data.updated}>
 	<article class="vh-article-main vh-animation vh-animation-init">
 		<header>
 			<h1>{post.data.title}</h1>

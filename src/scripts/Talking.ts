@@ -1,5 +1,5 @@
 import vh from 'vh-plugin'
-import { fmtDate } from '@/utils/index'
+import { escapeHTML, fmtDate, safeUrl, sanitizeHTML } from '@/utils/index'
 import { $GET } from '@/utils/index'
 // 图片懒加载
 import vhLzImgInit from "@/scripts/vhLazyImg";
@@ -16,7 +16,7 @@ const TalkingInit = async (data: any) => {
     if (typeof data === 'string') {
       res = await $GET(data);
     }
-    talkingDOM.innerHTML = res.map((i: any) => `<article><header><img data-vh-lz-src="${avatar}" /><p class="info"><span>${author}</span><time>${fmtDate(i.date)}前</time></p></header><section class="main">${i.content}</section><footer>${i.tags.map((tag: any) => `<span>${tag}</span>`).join('')}</footer></article>`).join('');
+    talkingDOM.innerHTML = res.map((i: any) => `<article><header><img data-vh-lz-src="${safeUrl(avatar, '/assets/images/local.svg')}" alt="${escapeHTML(author)}" /><p class="info"><span>${escapeHTML(author)}</span><time>${escapeHTML(fmtDate(i.date))}前</time></p></header><section class="main">${sanitizeHTML(i.content)}</section><footer>${(i.tags || []).map((tag: any) => `<span>${escapeHTML(tag)}</span>`).join('')}</footer></article>`).join('');
     // 图片懒加载
     vhLzImgInit();
   } catch {

@@ -1,6 +1,11 @@
 ---
+import fs from 'fs/promises';
+import path from 'path';
+
 const { src } = Astro.props;
-const svgContent = await import(`../../../public/assets/images/svg/${src}.svg?raw`).then(m => m.default);
+const svgName = String(src || '').replace(/[^a-zA-Z0-9_-]/g, '');
+const svgPath = path.resolve(process.cwd(), 'public/assets/images/svg', `${svgName}.svg`);
+const svgContent = svgName ? await fs.readFile(svgPath, 'utf-8').catch(() => '') : '';
 ---
 
 {svgContent && <Fragment set:html={svgContent} />}

@@ -1,0 +1,7 @@
+allowBuilds:
+  cpu-features: true
+  esbuild: true
+  sharp: true
+  ssh2: true
+minimumReleaseAgeExclude:
+  - astro@7.0.3

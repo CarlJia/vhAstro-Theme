@@ -1,6 +1,7 @@
-import vhPaopaoInit from '../../public/assets/js/vhPaopao.js';
+import vhPaopaoInit from './vhPaopaoCore';
+
 let headerMainHeight = 0;
-export default async () => {
+export default () => {
   // 调用
   const target = document.querySelector('main.main > .header-main');
   if (!target) return;

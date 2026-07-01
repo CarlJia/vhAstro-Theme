@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import Compress from "@playform/compress";
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Markdown 配置================
@@ -38,11 +39,16 @@ export default defineConfig({
 		serialize: (item) => ({ ...item, url: item.url.endsWith('/') ? item.url.slice(0, -1) : item.url })
 	}), mdx({ extendMarkdownConfig: false })],
 	markdown: {
-		remarkPlugins: [remarkMath, remarkDirective, remarkNote,],
-		rehypePlugins: [rehypeKatex, rehypeSlug, addClassNames],
+		processor: unified({
+			remarkPlugins: [remarkMath, remarkDirective, remarkNote,],
+			rehypePlugins: [rehypeKatex, rehypeSlug, addClassNames],
+		}),
 		syntaxHighlight: 'shiki',
 		shikiConfig: { theme: 'github-light' },
 	},
-	vite: { resolve: { alias: { "@": path.resolve(__dirname, "./src") } } },
+	vite: {
+		build: { cssMinify: 'esbuild' },
+		resolve: { alias: { "@": path.resolve(__dirname, "./src") } }
+	},
 	server: { host: '0.0.0.0' }
 });

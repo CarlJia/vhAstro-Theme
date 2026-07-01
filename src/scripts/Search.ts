@@ -1,4 +1,4 @@
-import { $GET } from '@/utils/index'
+import { $GET, escapeHTML, safeUrl } from '@/utils/index'
 
 // 更新数据
 let searchJson: any[] = [];
@@ -21,8 +21,8 @@ const findAndModifyElements = (arr: any[], keyword: string) => {
       const keywordIndex = content.indexOf(keyword);
       const start = Math.max(0, keywordIndex - 50);
       const end = Math.min(content.length, keywordIndex + keyword.length + 50);
-      let newContent = content.substring(start, end);
-      newContent = newContent.replace(new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "g"), `<span>${keyword}</span>`);
+      const fragment = content.substring(start, end);
+      const newContent = escapeHTML(fragment).replace(new RegExp(escapeHTML(keyword).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "g"), `<span>${escapeHTML(keyword)}</span>`);
       return { ...item, content: newContent };
     });
 }
@@ -30,7 +30,7 @@ const findAndModifyElements = (arr: any[], keyword: string) => {
 // 渲染页面
 let searchHTML = '';
 const renderSearch = (arr: any[]) => {
-  searchHTML = !arr.length ? '<em></em>' : arr.map(i => `<a class="vh-search-item" href="${i.url}"><span class="vh-ellipsis">${i.title}</span><p class="vh-ellipsis line-3">${i.content}</p></a>`).join('');
+  searchHTML = !arr.length ? '<em></em>' : arr.map(i => `<a class="vh-search-item" href="${safeUrl(i.url)}"><span class="vh-ellipsis">${escapeHTML(i.title)}</span><p class="vh-ellipsis line-3">${i.content}</p></a>`).join('');
   document.querySelector('.vh-header>.main>.vh-search>main>.vh-search-list')!.innerHTML = searchHTML;
 }
 
@@ -47,6 +47,8 @@ const vhSearchInit = () => {
   const searchDOM: any = document.querySelector(".vh-header>.main>nav>span.search-btn");
   const searchMainDOM: any = document.querySelector(".vh-header>.main>.vh-search>main");
   const searchListDOM: any = document.querySelector(".vh-header>.main>.vh-search");
+  if (!searchDOM || !searchMainDOM || !searchListDOM || searchListDOM.dataset.vhInit === "true") return;
+  searchListDOM.dataset.vhInit = "true";
   const addActive = () => setTimeout(() => {
     searchListDOM.classList.add("active");
     searchListDOM.querySelector(".search-input>input").focus();

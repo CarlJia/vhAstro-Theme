@@ -39,12 +39,37 @@ const fmtDate = (time: string | Date, hours_status = true) => {
 
 // 处理页码展示
 const fmtPage = (page: string | undefined) => page ? page.replace(/\//g, '') : null
+// 转义 HTML 文本，避免接口数据直接拼接进 innerHTML
+const htmlEscapeMap: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+};
+const escapeHTML = (value: unknown) => String(value ?? '').replace(/[&<>"']/g, (char) => htmlEscapeMap[char] || char);
+// 清理 URL 属性，避免 javascript: 等危险协议
+const safeUrl = (value: unknown, fallback: string = '#') => {
+  const url = String(value ?? '').trim();
+  if (!url) return fallback;
+  if (/^(https?:|mailto:|tel:|\/|#)/i.test(url)) return escapeHTML(url);
+  return fallback;
+}
+// 保留基础富文本展示，同时移除常见危险节点和事件属性
+const sanitizeHTML = (value: unknown) => String(value ?? '')
+  .replace(/<\s*(script|style|iframe|object|embed)[\s\S]*?<\/\s*\1\s*>/gi, '')
+  .replace(/\s+on[a-z]+\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi, '')
+  .replace(/\s+(href|src)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, ' $1="#"');
 // 加载外部脚本
+const scriptCache = new Map<string, Promise<HTMLScriptElement>>();
 const LoadScript = (
   src: string,
   attrs?: Array<{ k: string; v: string | boolean }>
 ): Promise<HTMLScriptElement> => {
-  return new Promise((resolve, reject) => {
+  if (scriptCache.has(src)) return scriptCache.get(src)!;
+  const existScript = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+  if (existScript) return Promise.resolve(existScript);
+  const promise = new Promise<HTMLScriptElement>((resolve, reject) => {
     const script = document.createElement("script");
     script.src = src;
     // 添加自定义属性
@@ -61,10 +86,16 @@ const LoadScript = (
     script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
     document.head.appendChild(script);
   });
+  scriptCache.set(src, promise);
+  return promise;
 };
 // 加载外部CSS
+const styleCache = new Map<string, Promise<HTMLLinkElement>>();
 const LoadStyle = (href: string): Promise<HTMLLinkElement> => {
-  return new Promise((resolve, reject) => {
+  if (styleCache.has(href)) return styleCache.get(href)!;
+  const existStyle = document.querySelector<HTMLLinkElement>(`link[href="${href}"]`);
+  if (existStyle) return Promise.resolve(existStyle);
+  const promise = new Promise<HTMLLinkElement>((resolve, reject) => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.type = "text/css";
@@ -73,6 +104,8 @@ const LoadStyle = (href: string): Promise<HTMLLinkElement> => {
     link.onerror = () => reject(new Error(`Failed to load CSS: ${href}`)); // CSS 加载失败
     document.head.appendChild(link); // 将 <link> 添加到文档中
   });
+  styleCache.set(href, promise);
+  return promise;
 }
 
 // 请求封装
@@ -99,4 +132,4 @@ const $POST = async (url: string, data: Record<string, any>, headers: Record<str
 
 
 
-export { $GET, $POST, getDescription, fmtTime, fmtDate, fmtPage, LoadScript, LoadStyle }
+export { $GET, $POST, getDescription, fmtTime, fmtDate, fmtPage, escapeHTML, safeUrl, sanitizeHTML, LoadScript, LoadStyle }
